@@ -22,18 +22,22 @@ class TestDecompressionProgram(unittest.TestCase):
 
         self.assertEqual(self.DecompressionProgram.duration, 10)
 
-    def test_data_check_sad(self):
+    def test_dtypes_check_sad(self):
 
-        self.assertTrue(self.DecompressionProgram.data_check.is_correct)
+        output = self.DecompressionProgram.dtypes_check()
 
-    def test_data_check_happy(self):
+        self.assertTrue(output.is_correct)
+
+    def test_dtypes_check_happy(self):
 
         self.DecompressionProgram.creation_date = datetime.datetime.now()
         self.DecompressionProgram.payload = pd.DataFrame(np.random.randint(0, 100, size=(100, 2)),
                                                          columns=['time', 'pressure'])
         self.DecompressionProgram.duration = 100
 
-        self.assertTrue(self.DecompressionProgram.data_check.is_correct)
+        output = self.DecompressionProgram.dtypes_check()
+
+        self.assertTrue(output.is_correct)
 
 
 if __name__ == '__main__':
