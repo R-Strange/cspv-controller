@@ -17,7 +17,7 @@ class Main:
         * Confirmation of start-up
 
     2. connect to Arduino and pressure sensor
-        * Test for connected Arduino Uno
+        * Test for connected Arduino Uno [Done]
         * Test for a connected pressure sensor
         * Connect to Arduino Uno
         * Connect to pressure sensor

@@ -22,18 +22,38 @@ class TestDecompressionProgram(unittest.TestCase):
 
         self.assertEqual(self.DecompressionProgram.duration, 10)
 
-    def test_data_check_sad(self):
+    def test_datatype_check_sad(self):
+        self.DecompressionProgram.duration = "long time"
 
-        self.assertTrue(self.DecompressionProgram.data_check.is_correct)
+        self.assertFalse(self.DecompressionProgram.datatype_check()[0])
 
-    def test_data_check_happy(self):
-
+    def test_datatype_check_happy(self):
         self.DecompressionProgram.creation_date = datetime.datetime.now()
         self.DecompressionProgram.payload = pd.DataFrame(np.random.randint(0, 100, size=(100, 2)),
                                                          columns=['time', 'pressure'])
         self.DecompressionProgram.duration = 100
 
-        self.assertTrue(self.DecompressionProgram.data_check.is_correct)
+        self.assertTrue(self.DecompressionProgram.datatype_check()[0])
+
+    def test_completion_test_happy(self):
+        self.DecompressionProgram.creation_date = datetime.datetime.now()
+        self.DecompressionProgram.payload = pd.DataFrame(np.random.randint(0, 100, size=(100, 2)),
+                                                         columns=['time', 'pressure'])
+        self.DecompressionProgram.duration = 100
+
+        self.DecompressionProgram.user_verification = True
+
+        self.assertTrue(self.DecompressionProgram.completion_check())
+
+    def test_completion_test_sad(self):
+        self.DecompressionProgram.creation_date = datetime.datetime.now()
+        self.DecompressionProgram.payload = pd.DataFrame(np.random.randint(0, 100, size=(100, 2)),
+                                                         columns=['time', 'pressure'])
+        self.DecompressionProgram.duration = 100
+
+        self.DecompressionProgram.user_verification = False
+
+        self.assertFalse(self.DecompressionProgram.completion_check())
 
 
 if __name__ == '__main__':
