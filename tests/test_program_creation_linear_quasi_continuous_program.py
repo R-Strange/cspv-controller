@@ -1,6 +1,6 @@
 import unittest
 from unittest import mock
-from program_creation import LinearQuasiContinuousProgram
+from program_creation import LinearQuasiContinuousProgram, search_for_dangerous_pressures
 
 
 class TestLinearQuasiContinuousProgram(unittest.TestCase):
@@ -65,6 +65,27 @@ class TestLinearQuasiContinuousProgram(unittest.TestCase):
             self.linear_quasi_continuous_program.get_program_parameters()
 
         self.assertEqual(str(cm.warning), "Warning: The start pressure is lower than the end pressure.")
+
+    @mock.patch("builtins.input", side_effect=[100, 250, 200])
+    def test_search_for_dangerous_pressures_happy(self, mock_input):
+        self.linear_quasi_continuous_program.get_program_parameters()
+        self.linear_quasi_continuous_program.calculate_program_waypoints()
+
+        self.assertTrue(self.linear_quasi_continuous_program.within_pressure_range)
+
+    @mock.patch("builtins.input", side_effect=[100, 250, 200])
+    def test_search_for_dangerous_pressures_sad(self, mock_input):
+        self.linear_quasi_continuous_program.get_program_parameters()
+        program_df = self.linear_quasi_continuous_program.calculate_program_waypoints()
+
+        program_df.iloc[2, 0] = 1000000
+
+        with self.assertRaises(ValueError) as cm:
+            search_for_dangerous_pressures(program_df)
+
+        self.assertEqual(str(cm.exception), "Pressures exceeding safe limits in program.")
+
+
 
 
 if __name__ == "__main__":

@@ -1,7 +1,22 @@
 import datetime
 import warnings
+import numpy as np
+import pandas as pd
 
 import main
+
+
+def search_for_dangerous_pressures(dataframe: pd.DataFrame) -> bool:
+    bad_data: pd.DataFrame = dataframe.loc[dataframe["target pressure"] > 251]
+
+    if bad_data.empty:
+        return False
+
+    else:
+        print("Pressures exceeding safe limits in program:")
+        print(bad_data)
+
+        raise ValueError("Pressures exceeding safe limits in program.")
 
 
 class CreateProgram(main.Main):
@@ -25,6 +40,7 @@ class LinearQuasiContinuousProgram(QuasiContinuousProgram):
         self.starting_pressure: float = float()
         self.ending_pressure: float = float()
         self.duration: int = int()
+        self.within_pressure_range: bool = bool()
 
     def get_program_parameters(self):
         # ToDo find the maximum change per second.
@@ -110,3 +126,21 @@ class LinearQuasiContinuousProgram(QuasiContinuousProgram):
             starting_pressure,
             ending_pressure,
         )
+
+    def calculate_program_waypoints(self):
+
+        pressure_target = np.flip(
+            np.linspace(
+                start=self.starting_pressure,
+                stop=self.ending_pressure,
+                num=self.duration,
+            )
+        )
+        time_series = np.arange(start=0, stop=self.duration)
+
+        program_df = pd.DataFrame(data=[pressure_target, time_series]).T
+        program_df.columns = ["target pressure", "elapsed time (seconds)"]
+
+        self.within_pressure_range = not search_for_dangerous_pressures(program_df)
+
+        return program_df
