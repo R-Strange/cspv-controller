@@ -5,6 +5,7 @@ from serial.tools import list_ports
 from typing import List
 from ErrorClasses import *
 
+
 def detect_ports() -> List[str]:
 
     list_of_ports: list = list_ports
@@ -43,6 +44,7 @@ class ArduinoUno:
         self.verbose: bool = verbose
 
         self.port: str = self.select_arduino_uno_port()
+        self.connection = self.connect_to_arduino()
 
     def select_arduino_uno_port(self):
 
@@ -60,3 +62,19 @@ class ArduinoUno:
             print("Arduino Uno device detected and selected at serial {}".format(port_device))
 
         return port_device
+
+    def connect_to_arduino(self) -> object:
+
+        if self.verbose:
+            print("connecting to Arduino serial port")
+        connection: object = pyfirmata.Arduino(self.port)
+
+        if self.verbose:
+            print("waiting for Firmata initialisation to avoid port buffering errors")
+
+        time.sleep(10)
+
+        if self.verbose:
+            print("Firmata initialised. Arduino Uno Connected")
+
+        return connection

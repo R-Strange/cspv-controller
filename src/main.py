@@ -19,7 +19,7 @@ class Main:
     2. connect to Arduino and pressure sensor
         * Test for connected Arduino Uno [Done]
         * Test for a connected pressure sensor
-        * Connect to Arduino Uno
+        * Connect to Arduino Uno [Done]
         * Connect to pressure sensor
 
     3. Create decompression program
