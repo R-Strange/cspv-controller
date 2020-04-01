@@ -2,6 +2,7 @@
   <dictionary name="osboxes">
     <words>
       <w>arduino</w>
+      <w>datetimestamp</w>
     </words>
   </dictionary>
 </component>
