@@ -21,13 +21,14 @@ class QuasiContinuousProgram(DecompressionProgram):
 
 class LinearQuasiContinuousProgram(QuasiContinuousProgram):
     def __init__(self):
+        super().__init__()
         self.starting_pressure: float = float()
         self.ending_pressure: float = float()
         self.duration: int = int()
-        super().__init__()
 
     def get_program_parameters(self):
         # ToDo find the maximum change per second.
+        # ToDo change errors to custom errors
 
         def validate_duration(duration):
 
@@ -36,7 +37,7 @@ class LinearQuasiContinuousProgram(QuasiContinuousProgram):
                     "Error: duration expected as a non-negative, non-zero int."
                 )
 
-            if duration < 1:
+            if duration <= 1:
                 raise ValueError(
                     "Error: duration expected as a non-negative, non-zero int."
                 )
@@ -67,7 +68,9 @@ class LinearQuasiContinuousProgram(QuasiContinuousProgram):
 
         def check_start_and_end_pressure(start, end):
             if start <= end:
-                warnings.warn("Warning: The start pressure is lower than the end pressure.")
+                warnings.warn(
+                    "Warning: The start pressure is lower than the end pressure."
+                )
 
         print(
             "Please input the following parameters: Length of program (seconds), starting pressure (MPa) "
@@ -102,6 +105,8 @@ class LinearQuasiContinuousProgram(QuasiContinuousProgram):
 
         check_start_and_end_pressure(start=starting_pressure, end=ending_pressure)
 
-        self.duration = program_duration
-        self.starting_pressure = starting_pressure
-        self.ending_pressure = ending_pressure
+        self.duration, self.starting_pressure, self.ending_pressure = (
+            program_duration,
+            starting_pressure,
+            ending_pressure,
+        )
