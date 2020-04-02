@@ -1,8 +1,12 @@
 from dataclasses import dataclass
 from typing import NamedTuple
 
+from program_creation import LinearQuasiContinuousProgram
+from arduino_controller import ArduinoUno
+from ErrorClasses import *
 
-class Main:
+
+def main(verbose=False):
     """
     Overarching Narrative:
     1. start program on laptop
@@ -23,11 +27,11 @@ class Main:
         * Connect to pressure sensor
 
     3. Create decompression program
-        * Get program details from user as direct input
-        * Create a quasi-continuous linear decompression program
-        * Display a plot of the decompression program
-        * Range limit checks within the program
-        * User verification prior to run
+        * Get program details from user as direct input [Done]
+        * Create a quasi-continuous linear decompression program [Done]
+        * Display a plot of the decompression program [Done]
+        * Range limit checks within the program [Done]
+        * User verification prior to run [Done]
 
     4. Run the program
         * Change the pressure
@@ -67,12 +71,14 @@ class Main:
     #    OUTPUTS: Termination code
     #
 
-    def __init__(self):
+    initialisation_check: bool = bool()
+    arduino_connector: object = None
+    pressure_sensor_connector: object = None
+    decompression_program: dataclass = None
 
-        self.initialisation_check: bool = bool()
-        self.arduino_connector: object = None
-        self.pressure_sensor_connector: object = None
-        self.decompression_program: dataclass = None
+    program_creator = LinearQuasiContinuousProgram()
+    program_creator.get_program_parameters()
+    program = program_creator.calculate_program_waypoints()
 
 
 if __name__ == "__main__":

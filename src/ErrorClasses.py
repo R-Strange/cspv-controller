@@ -16,5 +16,6 @@ class NoPortsDetectedError(BaseSerialConnectionErrorClass):
 class NoArduinoDevicesDetectedError(BaseSerialConnectionErrorClass):
     pass
 
+
 class MultipleArduinoDevicesConnectedError(BaseSerialConnectionErrorClass):
     pass

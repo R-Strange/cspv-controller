@@ -2,6 +2,8 @@ import datetime
 import warnings
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+from typing import Tuple
 
 import main
 
@@ -17,6 +19,32 @@ def search_for_dangerous_pressures(dataframe: pd.DataFrame) -> bool:
         print(bad_data)
 
         raise ValueError("Pressures exceeding safe limits in program.")
+
+
+def show_program(dataframe: pd.DataFrame) -> None:
+    y = dataframe["target pressure"]
+    x = dataframe["elapsed time (seconds)"]
+
+    plt.plot(x, y)
+
+    plt.show()
+
+
+def verify_program() -> bool:
+
+    def ask_user() -> str:
+        response = input("do you accept the program? [Y/n]")
+        return response
+
+    while True:
+
+        answer = ask_user()
+
+        if answer in ["Y", "y", "yes", "Yes", "YES"]:
+            return True
+
+        if answer in ["N", "n", "no", "No", "NO"]:
+            return False
 
 
 class CreateProgram(main.Main):
@@ -127,7 +155,7 @@ class LinearQuasiContinuousProgram(QuasiContinuousProgram):
             ending_pressure,
         )
 
-    def calculate_program_waypoints(self):
+    def calculate_program_waypoints(self) -> Tuple[pd.DataFrame, bool]:
 
         pressure_target = np.flip(
             np.linspace(
@@ -143,4 +171,8 @@ class LinearQuasiContinuousProgram(QuasiContinuousProgram):
 
         self.within_pressure_range = not search_for_dangerous_pressures(program_df)
 
-        return program_df
+        show_program(program_df)
+
+        verification = verify_program()
+
+        return program_df, verification

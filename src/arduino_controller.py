@@ -3,7 +3,7 @@ import pyfirmata
 import time
 from serial.tools import list_ports
 from typing import List
-from ErrorClasses import *
+from src.ErrorClasses import *
 
 
 def detect_ports() -> List[str]:
